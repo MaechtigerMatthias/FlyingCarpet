@@ -37,6 +37,7 @@ public class FlyingCarpet extends JavaPlugin implements Listener {
 
     private FCConfig mainConfig;
     private WorldGuardHook worldGuardHook;
+    private MessagePreferences messagePreferences;
     
     private List<UPlayer> players = new ArrayList<>();
     
@@ -53,6 +54,9 @@ public class FlyingCarpet extends JavaPlugin implements Listener {
 
         mainConfig = new FCConfig();
         mainConfig.reloadConfiguration();
+
+        messagePreferences = new MessagePreferences(this);
+        messagePreferences.load();
     }
 
     @Override
@@ -321,6 +325,10 @@ public class FlyingCarpet extends JavaPlugin implements Listener {
 
     public static FCConfig getMainConfig() {
         return instance.mainConfig;
+    }
+
+    public static MessagePreferences getMessagePreferences() {
+        return instance.messagePreferences;
     }
 
     public static boolean isWorldGuardHooked() {

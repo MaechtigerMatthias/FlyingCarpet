@@ -100,9 +100,9 @@ public class FCCommand implements CommandExecutor {
             up.setEnabled(!up.isEnabled());
             
             if (up.isEnabled()) {
-                Messages.get("message.carpet-on").send(sender);
+                sendToggleMessage(p, "message.carpet-on");
             } else {
-                Messages.get("message.carpet-off").send(sender);
+                sendToggleMessage(p, "message.carpet-off");
             }
             
             return true;
@@ -121,7 +121,7 @@ public class FCCommand implements CommandExecutor {
 
             up.setEnabled(true);
             
-            Messages.get("message.carpet-on").send(sender);
+            sendToggleMessage(p, "message.carpet-on");
             return true;
         }
         
@@ -133,7 +133,7 @@ public class FCCommand implements CommandExecutor {
             
             up.setEnabled(false);
             
-            Messages.get("message.carpet-off").send(sender);
+            sendToggleMessage(p, "message.carpet-off");
             return true;
         }
         
@@ -234,7 +234,37 @@ public class FCCommand implements CommandExecutor {
             return true;
         }
 
-        String arguments = "on:off:tools:light";
+        if (args[0].equalsIgnoreCase("togglemessage")) {
+            if (args.length != 1 && args.length != 2) {
+                Messages.get("error.invalid-arguments").argument("%valid%", "/mc togglemessage [on:off]").send(sender);
+                return true;
+            }
+
+            MessagePreferences preferences = FlyingCarpet.getMessagePreferences();
+            boolean enabled;
+
+            if (args.length == 1) {
+                enabled = preferences.toggle(p.getUniqueId());
+            } else if (args[1].equalsIgnoreCase("on")) {
+                enabled = true;
+                preferences.setEnabled(p.getUniqueId(), true);
+            } else if (args[1].equalsIgnoreCase("off")) {
+                enabled = false;
+                preferences.setEnabled(p.getUniqueId(), false);
+            } else {
+                Messages.get("error.invalid-arguments").argument("%valid%", "/mc togglemessage [on:off]").send(sender);
+                return true;
+            }
+
+            if (enabled)
+                Messages.get("message.togglemessage-on").send(sender);
+            else
+                Messages.get("message.togglemessage-off").send(sender);
+
+            return true;
+        }
+
+        String arguments = "on:off:tools:light:togglemessage";
 
         if(FlyingCarpet.isWorldGuardHooked() && p.hasPermission("flyingcarpet.worldguard")) {
             arguments += ":worldguard";
@@ -242,5 +272,12 @@ public class FCCommand implements CommandExecutor {
 
         Messages.get("error.invalid-arguments").argument("%valid%", "/mc [" + arguments + "]").send(sender);
         return true;
+    }
+
+    private static void sendToggleMessage(Player player, String key) {
+        if (!FlyingCarpet.getMessagePreferences().isEnabled(player.getUniqueId()))
+            return;
+
+        Messages.get(key).send(player);
     }
 }

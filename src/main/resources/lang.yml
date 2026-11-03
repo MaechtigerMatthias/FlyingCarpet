@@ -6,6 +6,8 @@ message:
    tools-off: '&7Tools for your flying carpet has been toggled &c&lOff'
    light-on: '&7Light for your flying carpet has been toggled &a&lOn'
    light-off: '&7Light for your flying carpet has been toggled &c&lOff'
+   togglemessage-on: '&7Flying carpet toggle messages have been &a&lEnabled'
+   togglemessage-off: '&7Flying carpet toggle messages have been &c&lDisabled'
    teleport-remove: '&cYour carpet has been removed because you teleported'
    region-remove: '&7Your flying carpet has been toggled &c&lOff &7as you entered a no-fly zone'
    wg:
